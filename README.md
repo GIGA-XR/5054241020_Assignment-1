@@ -39,7 +39,7 @@
 
 *Figure 4. Voice-transcription scene showing controller activation; no visible date/provenance.*
 
-**Submission gate:** current figures show no visible date or provenance. Before submission, add one author photo/capture or measurement with its date visibly on the figure. Do not call developer artwork your own.
+**Submission gate:** no current figure shows date/provenance. Add one dated author capture or measurement before submission; do not call developer artwork your own.
 
 ## 1. Device class and continuum placement
 
@@ -50,6 +50,8 @@ Quest 3 is not only “VR.” Meta describes Quest as an all-in-one 6DoF mixed-r
 > “On Quest 3 and Quest 3S, passthrough is full color with depth estimation” — [Meta passthrough documentation](https://developers.meta.com/horizon/essentials/horizon-os-passthrough/).
 
 That class forces registration to the physical room, depth-aware placement, and tolerance for camera latency. A word cloud floating through a table breaks the illusion. The view is also mediated, not equivalent to eyesight: Meta warns that HMDs have limited field of view and represent depth and colour less accurately than natural vision ([passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/)). Spatial Lingo gains context but inherits occlusion, lighting, and comfort constraints.
+
+> “HMDs have limited field of view (FoV) and are not as accurate at representing important visual cues like depth and color.” — [Meta passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/).
 
 ## 2. Input modality: speech is the core, hands are support
 
@@ -96,13 +98,15 @@ The intended benefit is concrete: a learner sees a real object, receives attache
 
 Privacy risk follows directly from the sensors: the camera sees rooms, documents, and bystanders; the microphone captures speech; depth scanning reveals layout. Raw camera access requires permission ([Passthrough Camera API](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/)). Users need a capture indicator, lesson-scoped mic permission, and notice that selected crops and voice data leave the headset. Never ship a reusable Llama key in the client.
 
+> “Either permission `android.permission.CAMERA` or `horizonos.permission.HEADSET_CAMERA` is required.” — [Passthrough Camera API](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/).
+
 The human-factors issue is accessibility. Speaking fits the pedagogy but excludes users with speech disabilities and users whose accents or noisy rooms reduce recognition accuracy; hand/controller selection does not replace it. Subtitles, adjustable speech rate/volume, text answers, and a replayable transcript would widen access. Meta also warns about long passthrough exposure ([passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/)). Sessions need pauses and should not require tiny labels while moving.
 
 > “Long periods of exposure to full passthrough may result in visual discomfort, motion sickness, disorientation, or negative after-effects.” — [Meta passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/).
 
 ## Conclusion
 
-Spatial Lingo is a 2026 standalone Quest mixed-reality application, not generic VR. Its strongest idea is linking a real object to an oral lesson; its weakest dependency is the cloud chain, which adds latency, cost, and data exposure. I would keep speech, add local ASR and a non-speech fallback, and treat learning benefits as unverified until measured.
+Spatial Lingo is a 2026 standalone Quest mixed-reality application, not generic VR. Its strongest idea is linking a real object to an oral lesson; its weakest dependency is the cloud chain. I would keep speech, add local ASR and a non-speech fallback, and treat learning benefits as unverified until measured.
 
 ## AI-assistance disclosure
 
