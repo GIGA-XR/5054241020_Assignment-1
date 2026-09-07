@@ -1,212 +1,122 @@
-# Individual Assignment 1: Extended reality application teardown
+# Individual Assignment 1: Extended Reality Application Teardown
 
-| **Name**  | Fazle Mawla Wahyuhanda             |
-| --------- | ---------------------------------- |
-| **NRP**   | 5054241020                         |
+| **Name** | Fazle Mawla Wahyuhanda |
+| --- | --- |
+| **NRP** | 5054241020 |
 | **Class** | Rekayasa Kecerdasan Artifisial (N) |
-| **Batch** | 2024                               |
+| **Batch** | 2024 |
 
----
+## Subject
 
-## Application information
-
-| **Information** | **Details** |
+| **Item** | **Finding** |
 | --- | --- |
-| **Application** | Spatial Lingo: Language Practice |
-| **Release date** | January 22, 2026 |
-| **Developer** | Magnopus, for Meta |
-| **Platform** | Meta Quest 3 |
-| **XR category** | Mixed reality |
-| **Main purpose** | Language practice |
-| **AI and ML components** | YOLOv9 through Unity Sentis, Llama 4 Maverick through Llama API, and Voice SDK (wit.ai) |
+| Application | Spatial Lingo: Language Practice |
+| Release | 22 January 2026 |
+| Reference device | Meta Quest 3 |
+| Class | Standalone 6DoF, video-see-through mixed reality HMD |
+| Intended task | Speak vocabulary about room objects |
+| AI components | YOLOv9/Sentis on device; Llama 4 Maverick through Llama API; Voice SDK through Wit.ai |
 
-The release date comes from [Meta's announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/). Magnopus lists the project as a Meta Quest 3 project released in January 2026. The official sources reviewed here identify Quest 3 as the target device, so Quest 3S is not listed as a confirmed platform.
+> “Jan 22, 2026” — [Meta announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/).
 
-## Contents
+**Thesis.** Spatial Lingo makes speech meaningful and turns the headset into a room-aware vocabulary tutor. This fits pronunciation practice, but cloud stages add network, data-transfer, and recognition dependencies.
 
-- [Introduction](#introduction)
-- [Device class](#device-class)
-- [Input modality](#input-modality)
-- [Artificial intelligence](#artificial-intelligence)
-- [Impact](#impact)
-- [Limitations](#limitations)
-- [Conclusion](#conclusion)
-- [References](#references)
+## Figures and evidence status
 
-<p align="center">
-  <img src="images/SpatialLingo.png" alt="Spatial Lingo Overview" width="750">
-</p>
-<p align="center"><em>Figure 1. Spatial Lingo title screen and virtual characters.</em></p>
+![Spatial Lingo developer artwork](assets/SpatialLingo.png)
 
----
+*Figure 1. Developer artwork; contextual evidence, not hands-on evidence.*
 
-## Introduction
+![Passthrough scene](assets/gif_pass.gif)
 
-Meta describes Spatial Lingo in its [developer announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/) as an open-source mixed reality application for practicing vocabulary with objects in the user's surroundings. Instead of starting with a fixed word list, the user looks around the room and works with objects that are already there. A chair, bottle, or laptop can become the subject of a lesson.
+*Figure 2. Passthrough scene from the repository capture; no visible date/provenance.*
 
-The application combines the Quest passthrough camera, on-device object detection, a large language model, and voice interaction. The camera provides images of the room. YOLO identifies objects, and the system places a word cloud near each detected object. Llama then supplies vocabulary and evaluates the user's spoken response. A small virtual companion named Golly Gosh speaks the lesson and gives feedback.
+![Generated word cloud](assets/gif_wc.gif)
 
-The main interaction loop is:
+*Figure 3. Word-cloud scene from the repository capture; no visible date/provenance.*
 
-```mermaid
-flowchart LR
-    A[Real object] --> B[Quest passthrough camera]
-    B --> C[YOLOv9 on Unity Sentis]
-    C --> D[3D position from Environment Depth]
-    D --> E[Llama API word cloud]
-    E --> F[Mixed reality lesson]
-    F --> G[User speaks]
-    G --> H[Voice SDK transcription]
-    H --> I[Llama evaluation]
-    I --> J[Spoken feedback]
-```
+![Voice transcription](assets/VoiceTranscription.gif)
 
-This design makes the room part of the lesson. The sources describe the software pipeline, but they do not report a controlled study of learning outcomes. Claims about better retention should therefore be treated as a design expectation, not as a measured result.
+*Figure 4. Voice-transcription scene showing controller activation; no visible date/provenance.*
 
----
+**Submission gate:** current figures show no visible date or provenance. Before submission, add one author photo/capture or measurement with its date visibly on the figure. Do not call developer artwork your own.
 
-## Device class
+## 1. Device class and continuum placement
 
-Spatial Lingo runs on Meta Quest, a standalone head-mounted device. Because the application shows the real room through camera passthrough and places virtual content over that view, a precise classification is:
+Quest 3 is not only “VR.” Meta describes Quest as an all-in-one 6DoF mixed-reality device ([device comparison](https://developers.meta.com/horizon/essentials/compare-devices/)). Spatial Lingo runs as a standalone Android/OpenXR app: outward-facing cameras feed the display, which composites the room with word clouds and Golly Gosh. This is **video see-through mixed reality**, between the physical and virtual ends of the reality–virtuality continuum.
 
-> **Standalone video see-through mixed reality head-mounted display (HMD)**
+> “Meta Quest devices are wireless all-in-one mixed reality devices delivering the freedom of 6 degrees of freedom” — [Meta device comparison](https://developers.meta.com/horizon/essentials/compare-devices/).
 
-This experience does not rely on transparent optical see-through. Its outward-facing cameras capture the room, and the application displays that camera view together with virtual objects. The Passthrough Camera API supplies camera frames, while Environment Depth and MRUK help place detected objects in the user's space, as described in the [sample documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/).
+> “On Quest 3 and Quest 3S, passthrough is full color with depth estimation” — [Meta passthrough documentation](https://developers.meta.com/horizon/essentials/horizon-os-passthrough/).
 
-This is why the application fits mixed reality better than pure virtual reality. The physical room remains visible and affects what the application shows, while digital word clouds, prompts, and the Golly Gosh character appear in the same space.
+That class forces registration to the physical room, depth-aware placement, and tolerance for camera latency. A word cloud floating through a table breaks the illusion. The view is also mediated, not equivalent to eyesight: Meta warns that HMDs have limited field of view and represent depth and colour less accurately than natural vision ([passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/)). Spatial Lingo gains context but inherits occlusion, lighting, and comfort constraints.
 
-<p align="center">
-  <img src="images/gif_pass.gif" alt="Spatial Lingo Mixed Reality Passthrough" width="650">
-</p>
-<p align="center"><em>Figure 2. Camera passthrough keeps the physical room visible.</em></p>
+## 2. Input modality: speech is the core, hands are support
 
----
+The application combines speech, hand/controller selection, head pose, and environmental sensing. I would keep the combination but rank the channels. **Speech is the core modality**: saying “chair” tests pronunciation and sentence use; pointing tests only selection. A keyboard or controller-only design would turn an oral exercise into visual spelling.
 
-## Input modality
+Hands are least disruptive for selecting or squeezing a word cloud. Controllers provide a fallback when tracking loses a fingertip. The sample supports both and implements squeeze from tracked finger bones ([sample repository](https://github.com/oculus-samples/Unity-SpatialLingo)). Looking supplies candidates; walking toward a word cloud activates its lesson.
 
-Spatial Lingo uses more than one input channel. Some channels come directly from the user, while others sense the surrounding space.
+> “This experience supports both hand tracking and controllers.” — [Spatial Lingo source repository](https://github.com/oculus-samples/Unity-SpatialLingo).
 
-| **Input or signal** | **Function in the application** |
-| --- | --- |
-| **Hand tracking** | Lets the user perform squeeze and selection interactions without holding a controller |
-| **Touch controllers** | Provides an alternative for selecting and interacting with mixed reality elements |
-| **Voice and microphone** | Captures spoken answers for transcription and lesson evaluation |
-| **Head movement and position** | Lets the user look around and approach word clouds placed in the room |
-| **Passthrough camera and Environment Depth** | Detects objects and estimates their 3D positions; this is environmental sensing rather than a button-like input |
+Speech can fail on accents, overlapping talk, or background noise; a wrong transcript can make Llama mark a correct answer wrong, and the network adds waiting time. My replacement is **local speech recognition with a visible transcript plus a text/gesture fallback**. This is a recommendation, not a documented feature. The sample names on-device recognition as an extension “to reduce latency and network dependency” ([technical documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/)).
 
-<p align="center">
-  <img src="images/VoiceTranscription.gif" alt="Spatial Lingo Voice Transcription" width="650">
-</p>
-<p align="center"><em>Figure 3. Voice input scene used for transcription.</em></p>
+## 3. AI across the pipeline
 
-The [official sample documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/) confirms hand tracking, controller input, voice transcription, passthrough camera access, and Environment Depth. Eye tracking is not listed as an input modality in the sources used for this teardown.
+| Stage | What runs | Location and cost |
+| --- | --- | --- |
+| Perception | Passthrough → YOLOv9 → 2D boxes; Environment Depth maps boxes into 3D | YOLO/Sentis runs on Quest. It uses GPU, memory, battery, and camera bandwidth, but need not upload every frame. |
+| Content and evaluation | Crop + class → Llama 4 Maverick; word cloud, translation, feedback, dialogue | Hosted Llama API adds network latency, image/token transfer, usage cost, and a cloud data boundary. |
+| Speech | Audio → Voice SDK/Wit.ai transcription; text → Wit.ai TTS audio | External service requires internet and adds latency; TTS caching can reduce repeated requests. |
+| Rendering/delivery | Unity renders passthrough, text, character, audio, and depth placement | No evidence of a separate generative model; AI outputs feed ordinary headset-side XR rendering. |
 
-The combination makes Spatial Lingo a multimodal XR application. Hand or controller input handles selection, voice handles language practice, and camera plus depth data provide the context for each lesson.
+> “YOLO object detection runs on-device via Unity Sentis to classify objects into 80 COCO classes” — [Meta technical documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/).
 
----
+> “That transcript is then sent to Llama 4 Maverick” — [Meta announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/).
 
-## Artificial intelligence
+> “Only if the end user turns on the mic activation will the developer app record the voice command and send it directly to Wit.ai” — [Voice SDK activation documentation](https://developers.meta.com/horizon/documentation/unity/voice-sdk-activation/).
 
-AI is used in three connected parts of the experience. They do not all run in the same place or serve the same purpose.
+The split is sensible: a small detector runs continuously on Quest; the larger model is called after selection. Camera capture adds documented latency, GPU, and memory overhead ([camera performance](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/)). Llama exposes prompt/completion-token counts, so longer prompts and retries increase usage ([Llama API package documentation](https://github.com/oculus-samples/Unity-SpatialLingo/blob/main/Packages/com.meta.utilities.llamaapi/README.md)). I cannot state a per-lesson dollar cost without a bill or request log.
 
-### Object detection
+> “Image capture latency: 20-40ms” and “GPU overhead: ~1-2% per streamed camera” — [Passthrough Camera API](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/).
 
-YOLOv9 runs through Unity Sentis on the device and classifies camera images. The [technical documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/) says the sample uses 80 COCO object classes. Environment Depth then helps map a 2D detection into a 3D position so the word cloud can appear near the object.
+> “num_prompt_tokens” and “num_completion_tokens” — [Llama API package documentation](https://github.com/oculus-samples/Unity-SpatialLingo/blob/main/Packages/com.meta.utilities.llamaapi/README.md).
 
-The local detection step can reduce the need to send every full camera frame to a remote service. It also has a clear limitation: the model can only recognize the classes it supports, and performance can change with lighting, occlusion, or an unusual object.
+The pipeline also has a security cost. A cropped camera image goes to Llama, and Meta classifies camera images as Device User Data. Production should proxy the key through a backend, rate-limit calls, and minimise or blur content. The upstream package warns that embedding a Llama key in a shipped Quest binary can cause unauthorised usage and unexpected charges ([Llama API security guidance](https://github.com/oculus-samples/Unity-SpatialLingo/blob/main/Packages/com.meta.utilities.llamaapi/README.md)).
 
-### Language generation and evaluation
+> “Once an object is identified with YOLO, the image is cropped and sent to Llama API” — [Meta announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/).
 
-After YOLO identifies an object, the application crops the relevant image and sends the classification and image to Llama through the Llama API. Llama 4 Maverick can produce a bilingual word cloud with nouns, adjectives, and verbs. It also translates object names, evaluates the user's transcript, and generates dialogue for Golly Gosh.
+> “camera image data is considered Device User Data” — [Passthrough Camera API](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/).
 
-For example, a detected chair can produce the target-language word for "chair" together with related words and a short speaking exercise. The model output is useful for varying the lesson, but it can still contain an incorrect translation or an unsuitable example. The application should treat the output as generated content rather than as a guaranteed dictionary entry.
+> “Quest apps that are shipped to end users should not directly embed Llama API keys” — [Llama API security guidance](https://github.com/oculus-samples/Unity-SpatialLingo/blob/main/Packages/com.meta.utilities.llamaapi/README.md).
 
-### Speech interaction
+## 4. Impact
 
-The Voice SDK, which the technical documentation identifies as wit.ai, provides speech-to-text and text-to-speech. It transcribes the user's answer, sends the transcript to Llama for evaluation, and converts Golly Gosh's response back into speech.
+The intended benefit is concrete: a learner sees a real object, receives attached vocabulary, says the word, and gets feedback. That context may connect to daily life better than a detached list. It remains a design hypothesis, not a measured learning outcome; Meta reports no controlled retention study.
 
-Voice SDK handles the audio service, while Llama handles language generation and evaluation. The full experience depends on computer vision, a remote language model, and speech services working together.
+Privacy risk follows directly from the sensors: the camera sees rooms, documents, and bystanders; the microphone captures speech; depth scanning reveals layout. Raw camera access requires permission ([Passthrough Camera API](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/)). Users need a capture indicator, lesson-scoped mic permission, and notice that selected crops and voice data leave the headset. Never ship a reusable Llama key in the client.
 
-```mermaid
-flowchart TD
-    A[Physical environment] --> B[Passthrough camera]
-    B --> C[YOLOv9 on device]
-    C --> D[Detected object]
-    D --> E[Llama 4 Maverick]
-    E --> F[Generated word cloud]
-    F --> G[Mixed reality lesson]
-    G --> H[User speaks]
-    H --> I[Voice SDK transcription]
-    I --> J[Llama evaluation]
-    J --> K[Spoken feedback]
-```
+The human-factors issue is accessibility. Speaking fits the pedagogy but excludes users with speech disabilities and users whose accents or noisy rooms reduce recognition accuracy; hand/controller selection does not replace it. Subtitles, adjustable speech rate/volume, text answers, and a replayable transcript would widen access. Meta also warns about long passthrough exposure ([passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/)). Sessions need pauses and should not require tiny labels while moving.
 
-<p align="center">
-  <img src="images/gif_wc.gif" alt="Spatial Lingo AI Generated Word Cloud" width="650">
-</p>
-<p align="center"><em>Figure 4. Word-cloud interaction placed in the user's room.</em></p>
-
----
-
-## Impact
-
-### Learning and interaction
-
-Spatial Lingo's main design choice is contextual vocabulary practice. The object that supplies the word is physically present in front of the user, so the lesson has a direct visual referent. This could make the exercise easier to connect to everyday situations than a detached list of words. The official materials describe the implementation, but they do not provide a controlled comparison with flashcards or a conventional language-learning app. The possible learning benefit should therefore be described as a hypothesis, not as a proven outcome.
-
-The voice step adds practice that a text-only vocabulary app cannot provide. Users must say the target word or sentence, and the system checks the transcript. Recognition errors can still produce unfair feedback when there is background noise, an accent, or a pronunciation that the service handles poorly.
-
-### Privacy and data flow
-
-The application needs access to the Quest camera, microphone, and spatial data. Meta's [Passthrough Camera API guidance](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/) classifies camera images as Device User Data and requires developers to follow camera-access policies. The [Spatial Lingo announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/) also says that the detected image crop is sent to the Llama API. This creates a data-transfer and network dependency even though the first YOLO classification runs on the device.
-
-The camera may capture private rooms, documents, or other people who are not using the application. The sources used here do not specify how long those images or transcripts are retained. The report should not claim that data is permanently deleted or stored unless a current privacy policy confirms it.
-
-### Accessibility and wider use
-
-Hand tracking and controllers give users two ways to select objects, but speaking remains central to the lesson. That can exclude users who cannot speak clearly or who find voice input unreliable. The available sources do not include an accessibility evaluation.
-
-The same pipeline could be adapted for technical training, maintenance instructions, or museum interpretation. Those are possible extensions, not features demonstrated by the current application. An extension would also inherit the model-coverage, privacy, and network issues described above.
-
-<p align="center">
-  <img src="images/gif_gym.gif" alt="Spatial Lingo Mixed Reality Experience" width="650">
-</p>
-<p align="center"><em>Figure 5. Gym scene used to inspect spatial and voice systems.</em></p>
-
----
-
-## Limitations
-
-- YOLO is limited to its supported COCO classes and can misclassify or miss objects.
-- Camera lighting, occlusion, and object size can affect detection and placement.
-- Speech recognition can be affected by accents, pronunciation, and background noise.
-- Llama-generated vocabulary, dialogue, or evaluation can be inaccurate.
-- Llama API and Voice SDK calls introduce network availability and external-service dependencies.
-- Camera, microphone, and spatial-data permissions create privacy responsibilities for the user and developer.
-- The official [announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/) described the store release as U.S.-only at launch, which limits availability for users in other regions.
-- The available sources do not report learning results from a user study, so educational effectiveness remains unverified.
-
-These limitations matter because the experience is a chain. A failed camera permission, missed detection, network error, bad transcript, or incorrect Llama response can interrupt the lesson.
-
----
+> “Long periods of exposure to full passthrough may result in visual discomfort, motion sickness, disorientation, or negative after-effects.” — [Meta passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/).
 
 ## Conclusion
 
-Spatial Lingo is a standalone mixed reality application for Meta Quest 3. Its main inputs are hand tracking, controllers, voice, head movement, and environmental camera and depth data.
+Spatial Lingo is a 2026 standalone Quest mixed-reality application, not generic VR. Its strongest idea is linking a real object to an oral lesson; its weakest dependency is the cloud chain, which adds latency, cost, and data exposure. I would keep speech, add local ASR and a non-speech fallback, and treat learning benefits as unverified until measured.
 
-The application uses YOLOv9 through Unity Sentis for on-device object detection, Llama 4 Maverick through the Llama API for vocabulary generation and answer evaluation, and Voice SDK for speech-to-text and text-to-speech. The distinctive part of the design is the link between a real object, a generated lesson, and a spoken response.
+## AI-assistance disclosure
 
-That link gives the application a clear educational idea, but it does not remove the usual problems of AI systems. Recognition and translation can be wrong, cloud services add latency and data-transfer concerns, and voice input is not equally accessible to every user. Spatial Lingo is best understood as an open-source demonstration of an MR and AI pipeline, not as proof that the pipeline improves language learning.
+**What I used and for what.** I used an AI assistant to compare the draft with the rubric, locate unsupported claims, reduce it to 900–1500 words, and suggest examiner questions. I opened the primary sources and kept only claims supported by quoted lines. I did not use AI to invent a measurement, study, price, or figure.
+
+**What I disagreed with my AI assistant about.** The assistant initially treated all voice processing as on-device and suggested that the existing screenshots satisfied the dated-figure rule. I rejected both conclusions: Meta's Voice SDK documentation says audio is sent to Wit.ai, and none of the current image files visibly contains a date. The report therefore labels the speech stage as external and leaves the author-figure requirement as an explicit pre-submission gate.
 
 ## References
 
-1. Meta Horizon OS Developers. [Spatial Lingo: An Open Source App for AI-Assisted Language Practice with Everyday Objects](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/). January 22, 2026.
-
-2. Meta Horizon OS Developers. [Spatial Lingo technical documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/). Updated May 11, 2026.
-
-3. Oculus Samples. [Unity-SpatialLingo repository](https://github.com/oculus-samples/Unity-SpatialLingo). GitHub.
-
-4. Magnopus. [Spatial Lingo project page](https://www.magnopus.com/projects/spatial-lingo). Release date listed as January 2026.
-
-5. Meta Horizon OS Developers. [Passthrough Camera API overview](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/). Camera images are treated as Device User Data.
-6. Meta Horizon OS Developers. [Spatial data permission](https://developers.meta.com/horizon/documentation/unity/unity-spatial-data-perm/). Permission requirements for spatial and depth data.
+1. Meta Horizon OS Developers. [Spatial Lingo announcement](https://developers.meta.com/horizon/blog/spatial-lingo-open-source-app-ai-assisted-language-practice/), 22 January 2026.
+2. Meta Horizon OS Developers. [Spatial Lingo technical documentation](https://developers.meta.com/horizon/documentation/unity/unity-sample-spatial-lingo/), updated 11 May 2026.
+3. Meta Horizon OS Developers. [Meta Quest device comparison](https://developers.meta.com/horizon/essentials/compare-devices/), updated 3 September 2026.
+4. Oculus Samples. [Unity-SpatialLingo source repository](https://github.com/oculus-samples/Unity-SpatialLingo).
+5. Meta Horizon OS Developers. [Passthrough Camera API overview](https://developers.meta.com/horizon/documentation/spatial-sdk/spatial-sdk-pca-overview/), updated 21 April 2026.
+6. Meta Horizon OS Developers. [Voice SDK activation](https://developers.meta.com/horizon/documentation/unity/voice-sdk-activation/), updated 2026.
+7. Meta/Oculus Samples. [Llama API package documentation and security guidance](https://github.com/oculus-samples/Unity-SpatialLingo/blob/main/Packages/com.meta.utilities.llamaapi/README.md).
+8. Meta Horizon OS Developers. [Passthrough safety guidance](https://developers.meta.com/horizon/design/mr-health-passthrough/), updated 25 July 2025.
