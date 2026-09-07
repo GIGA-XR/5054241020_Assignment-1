@@ -21,6 +21,8 @@
 
 **Thesis.** Spatial Lingo makes speech meaningful and turns the headset into a room-aware vocabulary tutor. This fits pronunciation practice, but cloud stages add network, data-transfer, and recognition dependencies.
 
+**Method note.** No Spatial Lingo or VR headset used. Source-and-code teardown; runtime claims come from linked docs/repository, not personal use.
+
 ## Figures and evidence status
 
 ![Spatial Lingo developer artwork](assets/SpatialLingo.png)
@@ -29,17 +31,17 @@
 
 ![Passthrough scene](assets/gif_pass.gif)
 
-*Figure 2. Passthrough scene from the repository capture; no visible date/provenance.*
+*Figure 2. Developer passthrough capture; not an author session; date not visible.*
 
 ![Generated word cloud](assets/gif_wc.gif)
 
-*Figure 3. Word-cloud scene from the repository capture; no visible date/provenance.*
+*Figure 3. Developer word-cloud capture; not an author session; date not visible.*
 
 ![Voice transcription](assets/VoiceTranscription.gif)
 
-*Figure 4. Voice-transcription scene showing controller activation; no visible date/provenance.*
+*Figure 4. Developer voice-transcription capture; not an author session; date not visible.*
 
-**Submission gate:** no current figure shows date/provenance. Add one dated author capture or measurement before submission; do not call developer artwork your own.
+**Submission gate:** no personal session/measurement. Add one dated author capture or measurement before submission; never claim developer art as your own.
 
 ## 1. Device class and continuum placement
 
@@ -110,9 +112,9 @@ Spatial Lingo is a 2026 standalone Quest mixed-reality application, not generic 
 
 ## AI-assistance disclosure
 
-**What I used and for what.** I used an AI assistant to compare the draft with the rubric, locate unsupported claims, reduce it to 900–1500 words, and suggest examiner questions. I opened the primary sources and kept only claims supported by quoted lines. I did not use AI to invent a measurement, study, price, or figure.
+**What I used and for what.** I used an AI assistant to compare the draft with the rubric, remove unsupported claims, fit 900–1500 words, and suggest examiner questions. I checked primary sources and retained quoted evidence. I did not use AI to invent a measurement, study, price, or figure.
 
-**What I disagreed with my AI assistant about.** The assistant initially treated all voice processing as on-device and suggested that the existing screenshots satisfied the dated-figure rule. I rejected both conclusions: Meta's Voice SDK documentation says audio is sent to Wit.ai, and none of the current image files visibly contains a date. The report therefore labels the speech stage as external and leaves the author-figure requirement as an explicit pre-submission gate.
+**What I disagreed with my AI assistant about.** It initially treated voice processing as on-device and said the screenshots met the dated-figure rule. I rejected both: Meta says audio is sent to Wit.ai, and no current image visibly contains a date. The report labels speech external and leaves the author-figure requirement as a pre-submission gate.
 
 ## References
 
